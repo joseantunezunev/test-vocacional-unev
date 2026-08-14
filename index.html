@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test Vocacional Profesional | UNEV</title>
+<meta name="description" content="Descubre en pocos minutos cuál de las cinco carreras técnicas de UNEV se ajusta mejor a tu perfil.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0E2A47; --navy-deep:#071B30; --navy-soft:#1D4370;
+  --orange:#F07C22; --orange-deep:#D2620D; --orange-mist:#FFF2E6;
+  --paper:#FFF; --mist:#F3F6FA; --line:#DCE4ED; --ink:#16212E; --muted:#6E7F91;
+  --display:'Century Gothic','Jost','Questrial',system-ui,sans-serif;
+  --body:'Century Gothic','Jost',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',Consolas,monospace;
+  --r:14px; --shadow:0 1px 2px rgba(14,42,71,.04),0 12px 40px rgba(14,42,71,.10);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--body);font-size:17px;line-height:1.55;color:var(--ink);
+     background:var(--mist);-webkit-font-smoothing:antialiased}
+button{font-family:inherit}
+.unev-app{max-width:760px;margin:0 auto;padding:28px 18px 64px}
+
+/* Banda de encabezado, igual a la del documento Word */
+.band{background:var(--navy);margin:-34px -30px 28px;padding:32px 30px 30px;
+  border-radius:13px 13px 0 0;position:relative;overflow:hidden}
+.band::after{content:"";position:absolute;right:-70px;top:-70px;width:210px;height:210px;
+  border-radius:50%;background:rgba(240,124,34,.13)}
+.band__eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.19em;text-transform:uppercase;
+  color:#C9D6E4;margin:0 0 10px;position:relative}
+.band h1{color:#fff;margin:0 0 8px;font-size:clamp(26px,4.6vw,36px);position:relative}
+.band__sub{color:#C9D6E4;font-size:15px;margin:0;position:relative}
+
+/* Tabla de datos del participante */
+.h2rule{border-bottom:1.5px solid var(--orange);padding-bottom:8px;margin:0 0 16px}
+.datos{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:6px}
+.drow{display:grid;grid-template-columns:210px 1fr;border-bottom:1px solid var(--line)}
+.drow:last-child{border-bottom:0}
+.drow>span{background:var(--mist);padding:13px 15px;font-size:13.5px;font-weight:600;
+  color:var(--navy);display:flex;align-items:center;border-right:1px solid var(--line)}
+.drow input,.drow select{border:0;padding:13px 15px;font-family:var(--body);font-size:16px;
+  width:100%;background:#fff;color:var(--ink);border-radius:0}
+.drow input:focus,.drow select:focus{outline:none;box-shadow:inset 0 0 0 2px rgba(29,67,112,.2)}
+.drow--bad>span{background:var(--orange-mist);color:var(--orange-deep)}
+@media (max-width:600px){
+  .band{margin:-24px -18px 22px;padding:26px 18px 24px}
+  .drow{grid-template-columns:1fr}
+  .drow>span{border-right:0;border-bottom:1px solid var(--line);padding:10px 14px}
+}
+
+.brandbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.brandmark{display:flex;align-items:center;gap:11px;text-decoration:none}
+.brandmark .sq{width:34px;height:34px;border-radius:9px;background:var(--navy);display:grid;
+  place-items:center;color:#fff;font-family:var(--display);font-weight:700;font-size:14px;flex:0 0 auto}
+.brandmark .sq i{font-style:normal;color:var(--orange)}
+.brandmark span{font-family:var(--display);font-weight:600;color:var(--navy);font-size:15px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+.rail{height:3px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:22px}
+.rail__fill{height:100%;width:0;background:var(--navy);border-right:4px solid var(--orange);
+  transition:width .45s cubic-bezier(.4,0,.2,1)}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);padding:34px 30px}
+.screen{animation:rise .4s cubic-bezier(.2,.7,.3,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+h1{font-family:var(--display);font-weight:700;font-size:clamp(27px,4.6vw,38px);line-height:1.12;
+   letter-spacing:-.015em;color:var(--navy);margin:0 0 14px}
+h2{font-family:var(--display);font-weight:600;font-size:20px;color:var(--navy);margin:0 0 6px}
+p{margin:0 0 14px;color:#2C3B4C}
+.lede{font-size:18px;color:#3A4A5C}
+.fine{font-size:13.5px;color:var(--muted);line-height:1.5}
+
+.instrument{margin:26px 0 28px;border-top:1px solid var(--line);padding-top:22px}
+.instrument__row{display:grid;grid-template-columns:1fr 76px;align-items:center;gap:14px;padding:9px 0}
+.instrument__name{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.instrument__track{grid-column:1/-1;height:6px;background:var(--mist);border-radius:6px;overflow:hidden}
+.instrument__bar{height:100%;width:14%;background:var(--line);border-radius:6px}
+
+.meta{display:flex;flex-wrap:wrap;gap:10px 26px;margin:0 0 26px;font-family:var(--mono);
+  font-size:12px;color:var(--muted);letter-spacing:.04em}
+.meta b{color:var(--navy);font-weight:600}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:1px solid transparent;
+  border-radius:10px;padding:14px 26px;font-family:var(--display);font-weight:600;font-size:16px;
+  cursor:pointer;text-decoration:none;transition:background .16s,color .16s,border-color .16s,transform .1s}
+.btn:active{transform:translateY(1px)}
+.btn--primary{background:var(--orange);color:#fff}
+.btn--primary:hover{background:var(--orange-deep)}
+.btn--navy{background:var(--navy);color:#fff}
+.btn--navy:hover{background:var(--navy-deep)}
+.btn--ghost{background:transparent;color:var(--navy);border-color:var(--line)}
+.btn--ghost:hover{border-color:var(--navy);background:var(--mist)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn--wide{width:100%}
+.actions{display:flex;gap:12px;align-items:center;margin-top:26px;flex-wrap:wrap}
+.actions .spacer{flex:1}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:8px}
+
+.blockhead{display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+  padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.blockhead h2{margin:0}
+.counter{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em;white-space:nowrap}
+
+.q{padding:22px 0;border-bottom:1px solid var(--line)}
+.q:last-of-type{border-bottom:0}
+.q__text{display:flex;gap:13px;margin-bottom:14px}
+.q__n{font-family:var(--mono);font-size:12px;color:var(--orange);padding-top:4px;min-width:22px;font-weight:500}
+.q__label{font-size:17px;line-height:1.45;color:var(--ink);font-weight:500}
+
+.opts{display:flex;flex-direction:column;gap:7px;margin-left:35px}
+.opt{display:flex;align-items:flex-start;gap:11px;text-align:left;width:100%;
+  border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:12px 14px;
+  cursor:pointer;font-size:15.5px;line-height:1.4;color:var(--ink);
+  transition:border-color .14s,background .14s,color .14s}
+.opt:hover{border-color:var(--navy-soft);background:var(--mist)}
+.opt .dot{width:16px;height:16px;border-radius:50%;border:1.5px solid #9AAABB;flex:0 0 auto;
+  margin-top:2px;transition:border-color .14s,background .14s,box-shadow .14s}
+.opt[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.opt[aria-pressed="true"] .dot{border-color:var(--orange);background:var(--orange);
+  box-shadow:inset 0 0 0 3px var(--navy)}
+.q--missing .q__label{color:var(--orange-deep)}
+.q--missing .opt{border-color:#F5C79E}
+
+.notice{background:var(--orange-mist);border:1px solid #FAD9BC;border-radius:10px;padding:12px 15px;
+  font-size:14px;color:var(--orange-deep);margin-top:20px}
+.notice[hidden]{display:none}
+
+.field{margin-bottom:17px}
+.field label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.field input,.field select{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:10px;
+  font-family:var(--body);font-size:16px;color:var(--ink);background:var(--paper)}
+.field input:focus,.field select:focus{border-color:var(--navy);outline:none;box-shadow:0 0 0 3px rgba(29,67,112,.12)}
+.field--half{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field--half>div{margin:0}
+.consent{display:flex;gap:11px;align-items:flex-start;margin:20px 0 4px}
+.consent input{margin-top:4px;width:17px;height:17px;accent-color:var(--orange);flex:0 0 auto}
+.consent label{font-size:13.5px;color:var(--muted);line-height:1.5;text-transform:none;
+  letter-spacing:0;font-family:var(--body)}
+
+.verdict{background:var(--navy);color:#fff;border-radius:var(--r);padding:30px 28px;margin:0 0 26px;
+  position:relative;overflow:hidden}
+.verdict::after{content:"";position:absolute;right:-60px;top:-60px;width:200px;height:200px;
+  border-radius:50%;background:rgba(240,124,34,.14)}
+.verdict .eyebrow{color:rgba(255,255,255,.62);position:relative}
+.verdict h2{color:#fff;font-size:clamp(24px,4.4vw,31px);font-weight:700;margin:9px 0 10px;
+  line-height:1.15;position:relative}
+.verdict p{color:rgba(255,255,255,.84);margin:0;font-size:15.5px;position:relative}
+.tag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;background:var(--orange);color:#fff;padding:4px 9px;border-radius:5px;
+  margin-left:8px;vertical-align:middle}
+
+.chart{margin:0 0 30px}
+.chart__row{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:baseline;padding:13px 0 0}
+.chart__k{font-family:var(--mono);font-size:12px;color:var(--orange);font-weight:600}
+.chart__label{font-size:15px;color:var(--ink)}
+.chart__pct{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--navy)}
+.chart__track{height:8px;background:var(--mist);border-radius:8px;overflow:hidden;margin-top:8px}
+.chart__bar{height:100%;width:0;background:var(--navy-soft);border-radius:8px;
+  transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.chart__row--top .chart__label{font-weight:600;color:var(--navy)}
+.chart__row--top+.chart__track .chart__bar{background:var(--orange)}
+
+.detail{border-top:1px solid var(--line);padding-top:22px;margin-top:4px}
+.detail h2{font-size:17px}
+.detail ul{margin:10px 0 0;padding-left:20px;color:#2C3B4C}
+.detail li{margin-bottom:7px;font-size:15.5px}
+.panel{border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:26px 0}
+.status{font-size:13.5px;margin-top:16px;color:var(--muted)}
+.status b{color:var(--navy)}
+.footnote{text-align:center;margin-top:24px}
+
+@media (max-width:600px){
+  body{font-size:16px}
+  .unev-app{padding:20px 13px 52px}
+  .card{padding:24px 18px;border-radius:12px}
+  .opts{margin-left:0}
+  .q__text{gap:10px}
+  .field--half{grid-template-columns:1fr}
+  .actions .btn{width:100%}
+  .actions .spacer{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<div class="unev-app">
+  <div class="brandbar">
+    <a class="brandmark" href="#" id="brandLink">
+  <img src="https://i.imgur.com/8yG5BEp.png" alt="Logo UNEV" style="height:40px; width:auto; display:block;">
+  <span></span>
+</a>
+    <span class="eyebrow">Orientación vocacional</span>
+  </div>
+  <div class="rail"><div class="rail__fill" id="rail"></div></div>
+  <div class="card" id="card" role="main" aria-live="polite"></div>
+  <p class="fine footnote">Instituto Universitario de Educación Virtual · San Pedro Sula, Honduras</p>
+</div>
+
+<script>
+/* ==============================================================
+   CONFIGURACIÓN — edite solo este bloque
+   ============================================================== */
+const CONFIG = {
+
+  /* --- A dónde llegan los resultados --- */
+  correoDestino: "registro@unev.edu.hn",
+
+  /* Método de envío:
+     "formsubmit"  → servicio gratuito FormSubmit, no requiere instalar nada.
+                     Requiere activarlo una sola vez: haga el primer envío de
+                     prueba y confirme el correo que llega a registro@unev.edu.hn.
+     "appsscript"  → su propio Google Apps Script (más control, guarda en hoja
+                     de cálculo además de enviar el correo). Requiere pegar la
+                     URL en endpointAppsScript.
+     "ninguno"     → no envía nada (solo muestra el resultado en pantalla).      */
+  metodo: "appsscript",
+
+  endpointAppsScript: "https://script.google.com/macros/s/AKfycbz-OJRGRbuEGOIo6YLutQSnjnBPxRjaOKduoceLBUWtD1sTroeF-rsJpT1k_ieYuishCg/exec",
+
+  /* --- Enlaces y contacto --- */
+  whatsapp: "50400000000",
+  sitio: "https://unev.edu.hn",
+  admisiones: "https://unev.edu.hn/admisiones",
+
+  /* Baraja el orden en que se muestran las opciones de cada pregunta.
+     El conteo por letras sigue funcionando igual por dentro; esto solo evita
+     que la persona descubra el patrón y responda hacia la carrera que ya
+     tenía decidida. Póngalo en false si quiere ver las opciones en orden a–e. */
+  barajarOpciones: true,
+
+  /* true  → los datos del participante se piden al inicio, igual que en el
+              documento impreso.
+     false → se piden al final, justo antes de mostrar el resultado.          */
+  datosAlInicio: true,
+
+  paises: ["Honduras","Estados Unidos","Guatemala","El Salvador","Nicaragua",
+           "Costa Rica","México","España","Canadá","Otro"]
+};
+
+/* ==============================================================
+   CARRERAS  ·  a b c d e
+   ============================================================== */
+const CARRERAS = {
+  a:{ nombre:"Técnico Universitario en Administración de Empresas",
+      corto:"Administración de Empresas",
+      perfil:"Tu perfil es de organización y gestión. Te mueve poner orden donde hay desorden, coordinar personas y entender los números que sostienen un negocio.",
+      hace:["Coordinar operaciones, presupuestos e inventarios",
+            "Administrar equipos de trabajo y procesos internos",
+            "Llevar la parte financiera y contable de un negocio",
+            "Montar y dirigir tu propio emprendimiento"] },
+
+  b:{ nombre:"Técnico Universitario en Diseño Gráfico",
+      corto:"Diseño Gráfico",
+      perfil:"Tu perfil es visual y creativo. Piensas en imágenes, notas los detalles que otros pasan por alto y quieres que tu trabajo se vea.",
+      hace:["Crear identidad de marca: logos, paletas, manuales",
+            "Diseñar piezas para redes, campañas y publicidad",
+            "Editar imagen y video para marcas y creadores",
+            "Trabajar por proyecto con clientes dentro y fuera del país"] },
+
+  c:{ nombre:"Técnico Universitario en Programación Web",
+      corto:"Programación Web",
+      perfil:"Tu perfil es lógico y constructivo. Te gusta desarmar problemas, entender por qué algo falla y no soltarlo hasta que funciona.",
+      hace:["Desarrollar sitios y aplicaciones web",
+            "Programar la parte visual y la lógica de un sistema",
+            "Dar mantenimiento y soporte a plataformas digitales",
+            "Trabajar en remoto para empresas de cualquier país"] },
+
+  d:{ nombre:"Técnico Universitario en IA Aplicada a la Gestión Empresarial",
+      corto:"IA Aplicada a la Gestión Empresarial", nueva:true,
+      perfil:"Tu perfil está entre la tecnología y el negocio. Te interesan los datos, la automatización y usar la IA para que las cosas se hagan mejor y más rápido.",
+      hace:["Automatizar tareas y procesos repetitivos con IA",
+            "Analizar datos para apoyar decisiones de negocio",
+            "Implementar asistentes y flujos inteligentes",
+            "Acompañar la transformación digital de una empresa"] },
+
+  e:{ nombre:"Técnico Universitario en Marketing Digital con IA",
+      corto:"Marketing Digital con IA", nueva:true,
+      perfil:"Tu perfil es comunicativo y persuasivo. Entiendes a las audiencias, te interesa por qué la gente reacciona y quieres hacer que una marca llegue lejos.",
+      hace:["Planificar y ejecutar campañas en redes y buscadores",
+            "Crear contenido y estrategia de marca con apoyo de IA",
+            "Medir resultados y optimizar la inversión publicitaria",
+            "Gestionar la presencia digital de empresas y negocios propios"] }
+};
+
+const LETRAS = ["a","b","c","d","e"];
+
+/* ==============================================================
+   BANCO DE 30 ÍTEMS  ·  el orden del arreglo es a, b, c, d, e
+   ============================================================== */
+const PREGUNTAS = [
+["Si te dan un proyecto nuevo desde cero, lo primero que haces es:",
+ ["Armar un plan con tiempos, tareas y responsables","Imaginar cómo se va a ver","Dividirlo en partes y ver qué hay que construir","Buscar datos y herramientas que lo hagan más eficiente","Pensar a quién va dirigido y cómo comunicarlo"]],
+["En un trabajo en equipo, el rol que asumes naturalmente es:",
+ ["El que coordina y da seguimiento","El que hace que todo se vea bien","El que resuelve la parte técnica","El que analiza la información y propone mejoras","El que presenta y convence"]],
+["De estas materias, la que estudiarías con más gusto:",
+ ["Contabilidad y finanzas","Composición y color","Lógica de programación","Análisis de datos","Comportamiento del consumidor"]],
+["Un negocio no está vendiendo. Tu primera reacción es revisar:",
+ ["Los costos y la organización interna","La imagen y presentación de la marca","Si su sitio o su sistema funciona bien","Los datos, para encontrar dónde se está perdiendo","Cómo se está promocionando"]],
+["En tu tiempo libre te llama más:",
+ ["Leer sobre negocios y emprendimientos","Dibujar, editar fotos o videos","Probar programas, apps o armar cosas en la computadora","Ver cómo funciona la inteligencia artificial","Ver contenido de redes y analizar por qué funciona"]],
+["Te sentirías más orgulloso u orgullosa de:",
+ ["Haber levantado una empresa que funciona sola","Haber creado una marca que la gente reconoce","Haber construido una plataforma que mucha gente usa","Haber automatizado un proceso que ahorra horas de trabajo","Haber logrado una campaña que se volvió conversación"]],
+["La herramienta que te gustaría dominar en tu trabajo:",
+ ["Hojas de cálculo y sistemas de gestión","Programas de diseño e ilustración","Editores de código","Plataformas de inteligencia artificial y análisis de datos","Administradores de redes y publicidad digital"]],
+["Cuando algo sale mal, lo que más te molesta es:",
+ ["Que no hubiera un plan ni responsables claros","Que el resultado se vea descuidado","Que algo falle y nadie sepa por qué","Que se haya decidido sin revisar la información","Que el mensaje no le llegara a la gente correcta"]],
+["Un cliente te dice “necesito crecer”. Le propones:",
+ ["Ordenar sus finanzas y sus procesos","Renovar su identidad visual","Construirle un sitio o un sistema propio","Medir sus datos y automatizar lo repetitivo","Una estrategia de contenido y publicidad"]],
+["Prefieres un trabajo donde:",
+ ["Tomes decisiones y dirijas","Crees algo visible cada día","Resuelvas problemas técnicos","Trabajes con información y tecnología","Estés en contacto con audiencias y clientes"]],
+["De estos anuncios de empleo, el que abrirías primero:",
+ ["Asistente de gerencia / administrador","Diseñador gráfico","Desarrollador web junior","Analista de datos / especialista en IA","Community manager / especialista en marketing"]],
+["Tu mayor fortaleza personal es:",
+ ["La organización","La creatividad","La paciencia para resolver","El pensamiento analítico","La facilidad para comunicarte"]],
+["Te ofrecen un curso gratuito. Escoges:",
+ ["Gestión de proyectos","Diseño de marca","Desarrollo de aplicaciones","Inteligencia artificial aplicada","Publicidad en redes sociales"]],
+["Al entregar un trabajo, lo que más te preocupa es que:",
+ ["Los números cuadren","Se vea profesional","Funcione sin errores","Esté respaldado con evidencia","Convenza a quien lo recibe"]],
+["Si tuvieras tu propio negocio, disfrutarías más:",
+ ["Administrarlo","Diseñar todo su aspecto","Desarrollar su plataforma","Optimizarlo con tecnología","Promocionarlo y venderlo"]],
+["La frase con la que más te identificas:",
+ ["“Todo funciona mejor cuando está ordenado”","“Lo que se ve bien, se recuerda”","“Todo problema tiene solución si lo desarmas”","“Los datos dicen la verdad”","“Lo que no se comunica, no existe”"]],
+["Te piden mejorar la atención de una tienda. Empiezas por:",
+ ["Reorganizar el proceso y los turnos","Mejorar la imagen y la señalización del local","Instalar un sistema de pedidos en línea","Medir tiempos y detectar dónde se traba","Escuchar qué dicen los clientes y responderles"]],
+["Pasar ocho horas frente a la computadora haciendo esto no te cansaría:",
+ ["Llevar control de operaciones y reportes","Diseñar piezas gráficas","Escribir y corregir código","Explorar datos y trabajar con herramientas de IA","Crear contenido y dar seguimiento a campañas"]],
+["Lo que más valoras en un jefe:",
+ ["Que sea claro y organizado","Que respete tu criterio creativo","Que te deje resolver a tu manera","Que decida con base en información","Que sepa motivar y comunicar"]],
+["Dentro de cinco años te ves:",
+ ["Dirigiendo un área o tu propia empresa","Con un portafolio de marcas y clientes","Desarrollando productos digitales","Liderando la transformación tecnológica de una empresa","A cargo de la estrategia digital de una marca"]],
+["Cuando la gente cercana te pide ayuda, casi siempre es para:",
+ ["Organizarse o poner en orden un asunto","Que les hagas o arregles algo visual","Resolver un problema con un aparato o un programa","Explicarles cómo funciona alguna tecnología nueva","Redactar un mensaje o publicar algo"]],
+["De estos titulares, el que leerías completo:",
+ ["“Cinco errores que quiebran a las pequeñas empresas”","“Las marcas que rediseñaron su imagen este año”","“Lo que un desarrollador junior debe saber en 2026”","“Cómo la IA está cambiando la toma de decisiones empresariales”","“Por qué esta campaña vendió más que la competencia”"]],
+["Te dan L50,000 para arrancar un negocio. Tu primer gasto sería:",
+ ["Ordenar la parte legal, contable y de inventario","La identidad de la marca y el empaque","La plataforma o el sistema de ventas","Herramientas para medir y automatizar la operación","Publicidad para conseguir los primeros clientes"]],
+["Si mañana tuvieras que dar una clase, enseñarías:",
+ ["Cómo llevar las cuentas de un negocio","Cómo hacer un buen diseño","Cómo crear una página web","Cómo usar inteligencia artificial en el trabajo","Cómo hacer crecer una cuenta en redes"]],
+["La parte de un proyecto que no le delegarías a nadie:",
+ ["El control del presupuesto y los tiempos","La decisión final sobre cómo se ve","La construcción de lo que tiene que funcionar","El análisis de la información","El mensaje que va a salir al público"]],
+["De estos problemas de una empresa, el que te gustaría que te asignaran:",
+ ["Hay desorden: nadie sabe quién hace qué","La empresa se ve poco profesional frente a la competencia","El sistema es lento y se cae a cada rato","Se toman decisiones a ciegas, sin información","Nadie conoce la empresa, no llegan clientes"]],
+["Preferirías que te pagaran por:",
+ ["Los resultados de la operación que administras","Cada pieza o proyecto creativo entregado","Cada producto que dejas funcionando","La mejora medible que logras en un proceso","Las ventas que generas"]],
+["El elogio que más te gustaría escuchar sobre tu trabajo:",
+ ["“Desde que estás vos, todo funciona”","“Esto quedó bellísimo”","“Nunca falla, siempre sirve”","“Nos hiciste ver algo que no habíamos notado”","“Todo el mundo está hablando de esto”"]],
+["De estas tareas, la que harías aunque nadie te la pidiera:",
+ ["Armar un presupuesto o un cronograma","Rediseñar algo que se ve mal","Automatizar o arreglar algo que da problemas","Revisar datos para entender qué está pasando","Escribir una publicación o grabar un video"]],
+["Si tu trabajo saliera en el periódico, el titular diría:",
+ ["“Levantó una empresa desde cero”","“Le dio identidad a una marca hondureña”","“Construyó la plataforma que usan miles”","“Llevó la inteligencia artificial a la empresa hondureña”","“La campaña que puso a hablar al país”"]]
+];
+
+const BLOQUES = [
+  {ini:0,  fin:5,  titulo:"Cómo trabajas"},
+  {ini:5,  fin:10, titulo:"Qué disfrutas hacer"},
+  {ini:10, fin:15, titulo:"Qué te llama la atención"},
+  {ini:15, fin:20, titulo:"Cómo te proyectas"},
+  {ini:20, fin:25, titulo:"Con qué te identificas"},
+  {ini:25, fin:30, titulo:"Lo que dice tu forma de ser"}
+];
+
+/* Preguntas de proyección que deciden los empates */
+const DESEMPATE = [6, 20, 24, 30];
+
+/* ==============================================================
+   ESTADO
+   ============================================================== */
+const state = { paso:0, resp:{}, lead:null, res:null, envio:"pendiente" };
+const TOTAL = 1 + BLOQUES.length + (CONFIG.datosAlInicio ? 0 : 1) + 1;
+const card = document.getElementById('card');
+const rail = document.getElementById('rail');
+document.getElementById('brandLink').href = CONFIG.sitio;
+
+/* Orden de presentación de las opciones, fijado una sola vez por sesión */
+const ORDEN = PREGUNTAS.map(() => {
+  const idx = [0,1,2,3,4];
+  if (!CONFIG.barajarOpciones) return idx;
+  for (let i = idx.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [idx[i], idx[j]] = [idx[j], idx[i]];
+  }
+  return idx;
+});
+
+const esc = s => String(s).replace(/[&<>"']/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const avance = () => rail.style.width = Math.round((state.paso/(TOTAL-1))*100) + '%';
+function irA(p){ state.paso = p; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+/* ==============================================================
+   RENDER
+   ============================================================== */
+function render(){
+  avance();
+  if(state.paso === 0) return intro();
+  if(state.paso <= BLOQUES.length) return bloque(state.paso - 1);
+  if(!CONFIG.datosAlInicio && state.paso === BLOQUES.length + 1) return formulario();
+  return resultado();
+}
+
+/* Campos del participante, en el mismo orden que el documento impreso */
+const CAMPOS = [
+  {id:"nombre",   lab:"Nombre completo",          tipo:"text",  ph:"Escribe tu nombre completo", auto:"name"},
+  {id:"fecha",    lab:"Fecha",                    tipo:"date"},
+  {id:"correo",   lab:"Correo electrónico",       tipo:"email", ph:"tucorreo@ejemplo.com",       auto:"email"},
+  {id:"whatsapp", lab:"Teléfono / WhatsApp",      tipo:"tel",   ph:"+504 0000 0000",             auto:"tel"},
+  {id:"ciudad",   lab:"Ciudad y país",            tipo:"ciudad"},
+  {id:"inicio",   lab:"¿Cuándo desea iniciar?",   tipo:"select",
+   ops:["En el próximo período","En 3 a 6 meses","En algún momento de este año","Solo estoy explorando"]}
+];
+
+function tablaDatos(){
+  const hoy = new Date().toISOString().slice(0,10);
+  return `<div class="datos">${CAMPOS.map(c => {
+    let control;
+    if(c.tipo === "select"){
+      control = `<select id="f_${c.id}">${c.ops.map(o=>`<option>${esc(o)}</option>`).join('')}</select>`;
+    } else if(c.tipo === "ciudad"){
+      control = `<div style="display:grid;grid-template-columns:1fr 1fr">
+          <input id="f_ciudad" type="text" placeholder="Ciudad" autocomplete="address-level2">
+          <select id="f_pais" style="border-left:1px solid var(--line)">
+            ${CONFIG.paises.map(p=>`<option>${esc(p)}</option>`).join('')}
+          </select></div>`;
+    } else {
+      control = `<input id="f_${c.id}" type="${c.tipo}"${c.auto?` autocomplete="${c.auto}"`:''}`
+              + `${c.ph?` placeholder="${esc(c.ph)}"`:''}`
+              + `${c.tipo==="date"?` value="${hoy}"`:''}>`;
+    }
+    return `<div class="drow" data-f="${c.id}"><span>${esc(c.lab)}</span>${control}</div>`;
+  }).join('')}</div>`;
+}
+
+/* Lee y valida la tabla de datos. Devuelve el objeto o null. */
+function leerDatos(mostrarError){
+  const v = id => { const el = document.getElementById(id); return el ? el.value.trim() : ""; };
+  const marcar = id => {
+    const row = card.querySelector(`.drow[data-f="${id}"]`);
+    if(row){ row.classList.add('drow--bad'); row.scrollIntoView({behavior:'smooth',block:'center'}); }
+  };
+  card.querySelectorAll('.drow').forEach(r => r.classList.remove('drow--bad'));
+
+  const nombre = v('f_nombre'), correo = v('f_correo'), whatsapp = v('f_whatsapp');
+  if(nombre.length < 3){        marcar('nombre');   mostrarError("Escribe tu nombre completo."); return null; }
+  if(!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(correo)){ marcar('correo'); mostrarError("Revisa tu correo electrónico."); return null; }
+  if(whatsapp.replace(/\D/g,'').length < 8){ marcar('whatsapp'); mostrarError("Escribe un número de WhatsApp válido."); return null; }
+  if(!document.getElementById('f_ok').checked){ mostrarError("Marca la autorización para continuar."); return null; }
+
+  return { nombre, correo, whatsapp,
+           fecha:  v('f_fecha'),
+           ciudad: v('f_ciudad'),
+           pais:   v('f_pais'),
+           inicio: v('f_inicio') };
+}
+
+function intro(){
+  card.innerHTML = `
+  <div class="screen">
+
+    <div class="band">
+      <p class="band__eyebrow">UNEV · Instituto Universitario de Educación Virtual</p>
+      <h1>Test Vocacional Profesional</h1>
+      <p class="band__sub">Instrumento de orientación para las carreras técnicas universitarias</p>
+    </div>
+
+    ${CONFIG.datosAlInicio ? `
+      <span class="eyebrow">Datos del participante</span>
+      <div style="height:10px"></div>
+      ${tablaDatos()}
+      <div class="consent">
+        <input type="checkbox" id="f_ok">
+        <label for="f_ok">Autorizo a UNEV a contactarme por correo, teléfono o WhatsApp
+        para enviarme el resultado de este test e información académica y de admisión.</label>
+      </div>
+      <div style="height:14px"></div>` : ''}
+
+    <h2 class="h2rule" style="margin-top:26px">Instrucciones</h2>
+    <p>Marca una sola opción por pregunta: la que más se parezca a ti. No hay respuestas
+    correctas ni incorrectas, y ninguna opción vale más que otra.</p>
+    <p>Responde con lo que realmente harías, no con lo que crees que deberías responder.
+    Si dudas entre dos opciones, escoge la que elegirías un día cualquiera, no en tu mejor día.</p>
+    <p>El test toma entre 8 y 10 minutos. Responde las 30 preguntas sin dejar ninguna en blanco.
+    El resultado aparece al terminar y se registra automáticamente en UNEV.</p>
+
+    <div class="notice" id="notice" hidden></div>
+
+    <div style="height:10px"></div>
+    <button class="btn btn--primary btn--wide" id="go">Comenzar el test</button>
+
+    ${CONFIG.datosAlInicio ? '' : `<p class="fine" style="margin-top:16px">Al final te pediremos
+      tus datos para enviarte el resultado y la información de la carrera más afín a tu perfil.</p>`}
+  </div>`;
+
+  const n = document.getElementById('notice');
+  const err = m => { n.textContent = m; n.hidden = false; };
+
+  document.getElementById('go').onclick = () => {
+    if(CONFIG.datosAlInicio){
+      const datos = leerDatos(err);
+      if(!datos) return;
+      state.lead = datos;
+      n.hidden = true;
+    }
+    irA(1);
+  };
+}
+
+function bloque(i){
+  const b = BLOQUES[i];
+  const ultimo = i === BLOQUES.length - 1;
+
+  card.innerHTML = `
+  <div class="screen">
+    <div class="blockhead">
+      <h2>${esc(b.titulo)}</h2>
+      <span class="counter">${b.fin} / 30</span>
+    </div>
+
+    ${PREGUNTAS.slice(b.ini, b.fin).map((q, j) => {
+      const idx = b.ini + j;
+      const sel = state.resp[idx];
+      return `
+      <div class="q" data-q="${idx}">
+        <div class="q__text">
+          <span class="q__n">${String(idx+1).padStart(2,'0')}</span>
+          <span class="q__label">${esc(q[0])}</span>
+        </div>
+        <div class="opts" role="group" aria-label="${esc(q[0])}">
+          ${ORDEN[idx].map(k => `
+            <button type="button" class="opt" data-q="${idx}" data-k="${LETRAS[k]}"
+                    aria-pressed="${sel === LETRAS[k] ? 'true' : 'false'}">
+              <span class="dot"></span><span>${esc(q[1][k])}</span>
+            </button>`).join('')}
+        </div>
+      </div>`;
+    }).join('')}
+
+    <div class="notice" id="notice" hidden>Faltan respuestas. Marca una opción en cada pregunta para continuar.</div>
+
+    <div class="actions">
+      <button class="btn btn--ghost" id="back">Atrás</button>
+      <span class="spacer"></span>
+      <button class="btn btn--primary" id="next">${ultimo ? 'Ver mi resultado' : 'Continuar'}</button>
+    </div>
+  </div>`;
+
+  card.querySelectorAll('.opt').forEach(btn => {
+    btn.onclick = () => {
+      state.resp[+btn.dataset.q] = btn.dataset.k;
+      btn.closest('.opts').querySelectorAll('.opt')
+         .forEach(o => o.setAttribute('aria-pressed', o === btn ? 'true' : 'false'));
+      btn.closest('.q').classList.remove('q--missing');
+    };
+  });
+
+  document.getElementById('back').onclick = () => irA(state.paso - 1);
+  document.getElementById('next').onclick = () => {
+    const faltan = [];
+    for(let k = b.ini; k < b.fin; k++) if(!state.resp[k]) faltan.push(k);
+    if(faltan.length){
+      faltan.forEach(k => card.querySelector(`.q[data-q="${k}"]`).classList.add('q--missing'));
+      document.getElementById('notice').hidden = false;
+      card.querySelector(`.q[data-q="${faltan[0]}"]`).scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+    if(ultimo && CONFIG.datosAlInicio){
+      state.res = calcular();
+      irA(state.paso + 1);
+      enviar();
+      return;
+    }
+    irA(state.paso + 1);
+  };
+}
+
+function formulario(){
+  card.innerHTML = `
+  <div class="screen">
+    <span class="eyebrow">Último paso</span>
+    <h1 style="font-size:clamp(24px,4.2vw,32px)">Tu perfil está listo.</h1>
+    <p class="lede">¿A dónde te lo enviamos? Un asesor académico de UNEV te contactará
+    para resolver tus dudas sobre la carrera que resultó más afín.</p>
+
+    <div style="height:14px"></div>
+    ${tablaDatos()}
+    <div class="consent">
+      <input type="checkbox" id="f_ok">
+      <label for="f_ok">Autorizo a UNEV a contactarme por correo, teléfono o WhatsApp
+      para enviarme el resultado de este test e información académica y de admisión.</label>
+    </div>
+
+    <div class="notice" id="notice" hidden></div>
+
+    <div class="actions">
+      <button class="btn btn--ghost" id="back">Atrás</button>
+      <span class="spacer"></span>
+      <button class="btn btn--primary" id="send">Ver mi resultado</button>
+    </div>
+  </div>`;
+
+  const n = document.getElementById('notice');
+  const err = m => { n.textContent = m; n.hidden = false; };
+
+  document.getElementById('back').onclick = () => irA(state.paso - 1);
+  document.getElementById('send').onclick = () => {
+    const datos = leerDatos(err);
+    if(!datos) return;
+    state.lead = datos;
+    state.res  = calcular();
+    irA(state.paso + 1);
+    enviar();
+  };
+}
+
+
+/* ==============================================================
+   CÁLCULO POR LETRAS
+   ============================================================== */
+function calcular(){
+  const m = {a:0,b:0,c:0,d:0,e:0};
+  for(let i = 0; i < 30; i++) m[state.resp[i]]++;
+
+  const orden = LETRAS.slice().sort((x,y) => m[y] - m[x]);
+
+  // Desempate por las preguntas de proyección
+  if(m[orden[0]] === m[orden[1]]){
+    const pr = {a:0,b:0,c:0,d:0,e:0};
+    DESEMPATE.forEach(nq => pr[state.resp[nq-1]]++);
+    if(pr[orden[1]] > pr[orden[0]]) [orden[0], orden[1]] = [orden[1], orden[0]];
+  }
+
+  const t1 = m[orden[0]], t2 = m[orden[1]];
+  let lectura;
+  if(t1 >= 15)                     lectura = "Perfil definido. Se recomienda la carrera con confianza.";
+  else if(t1 >= 11)                lectura = "Inclinación clara. Recomendar la carrera y mencionar la segunda opción.";
+  else if(t1 >= 8 && t1 - t2 <= 2) lectura = "Perfil mixto. Presentar ambas carreras y pasar a entrevista de orientación.";
+  else if(t1 >= 8)                 lectura = "Inclinación moderada. Confirmar en entrevista de orientación.";
+  else                             lectura = "Perfil disperso. No forzar recomendación; agendar entrevista con Bienestar Estudiantil.";
+
+  return { conteo:m, orden, top:orden[0], t1, seg:orden[1], t2, lectura };
+}
+
+/* ==============================================================
+   ENVÍO A registro@unev.edu.hn
+   ============================================================== */
+function armarPayload(){
+  const r = state.res, L = state.lead;
+  const detalle = PREGUNTAS.map((q,i) =>
+    `${String(i+1).padStart(2,'0')}. ${state.resp[i]}) ${q[1][LETRAS.indexOf(state.resp[i])]}`
+  ).join("\n");
+
+  const resumen =
+`RESULTADO DEL TEST VOCACIONAL — UNEV
+
+Nombre:          ${L.nombre}
+Correo:          ${L.correo}
+WhatsApp:        ${L.whatsapp}
+Ciudad:          ${L.ciudad || "no indicada"}
+País:            ${L.pais}
+Desea iniciar:   ${L.inicio}
+Fecha declarada: ${L.fecha || "-"}
+Enviado:         ${new Date().toLocaleString('es-HN')}
+
+CARRERA RECOMENDADA:  ${CARRERAS[r.top].nombre}  (${r.t1} de 30)
+Segunda opción:       ${CARRERAS[r.seg].nombre}  (${r.t2} de 30)
+Lectura:              ${r.lectura}
+
+Conteo por letra:
+  a  Administración de Empresas ............ ${r.conteo.a}
+  b  Diseño Gráfico ......................... ${r.conteo.b}
+  c  Programación Web ....................... ${r.conteo.c}
+  d  IA Aplicada a la Gestión Empresarial ... ${r.conteo.d}
+  e  Marketing Digital con IA ............... ${r.conteo.e}
+
+Detalle de respuestas:
+${detalle}`;
+
+  return {
+    _subject: `Test vocacional · ${L.nombre} · ${CARRERAS[r.top].corto}`,
+    _template: "table",
+    _captcha: "false",
+    Nombre: L.nombre,
+    Correo: L.correo,
+    WhatsApp: L.whatsapp,
+    Fecha_declarada: L.fecha || "",
+    Ciudad: L.ciudad || "",
+    Pais: L.pais,
+    Desea_iniciar: L.inicio,
+    Carrera_recomendada: CARRERAS[r.top].nombre,
+    Puntaje: `${r.t1} de 30`,
+    Segunda_opcion: `${CARRERAS[r.seg].nombre} (${r.t2})`,
+    Lectura: r.lectura,
+    Conteo: `a=${r.conteo.a} · b=${r.conteo.b} · c=${r.conteo.c} · d=${r.conteo.d} · e=${r.conteo.e}`,
+    Conteo_a: r.conteo.a, Conteo_b: r.conteo.b, Conteo_c: r.conteo.c,
+    Conteo_d: r.conteo.d, Conteo_e: r.conteo.e,
+    Carrera_letra: r.top,
+    Respuestas: PREGUNTAS.map((q,i) => (i+1) + state.resp[i]).join(" "),
+    Resumen: resumen,
+    _resumen_texto: resumen
+  };
+}
+
+async function enviar(){
+  const payload = armarPayload();
+  window.UNEV_ULTIMO_RESULTADO = payload;
+  const marcar = s => { state.envio = s; pintarEstado(); };
+
+  if(CONFIG.metodo === "ninguno"){ marcar("desactivado"); return; }
+
+  try{
+    let url, body, headers;
+
+    if(CONFIG.metodo === "appsscript"){
+      if(!CONFIG.endpointAppsScript) throw new Error("Falta endpointAppsScript");
+      url = CONFIG.endpointAppsScript;
+      headers = { "Content-Type":"text/plain;charset=utf-8" };
+      body = JSON.stringify(payload);
+      await fetch(url, { method:"POST", mode:"no-cors", headers, body });
+      marcar("ok");
+      return;
+    }
+
+    url = "https://formsubmit.co/ajax/" + encodeURIComponent(CONFIG.correoDestino);
+    const res = await fetch(url, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json", "Accept":"application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => ({}));
+    marcar(res.ok && String(data.success) !== "false" ? "ok" : "error");
+
+  }catch(e){
+    console.warn("[UNEV] No se pudo enviar el resultado:", e);
+    marcar("error");
+  }
+}
+
+function pintarEstado(){
+  const el = document.getElementById('estadoEnvio');
+  if(!el) return;
+  const L = state.lead;
+  const cuerpo = encodeURIComponent(armarPayload()._resumen_texto);
+  const asunto = encodeURIComponent("Test vocacional · " + L.nombre);
+
+  el.innerHTML = ({
+    pendiente:   `Enviando tu resultado a UNEV…`,
+    ok:          `Resultado enviado a UNEV. Te contactaremos pronto.`,
+    desactivado: ``,
+    error:       `No pudimos enviar el resultado automáticamente.
+                  <a href="mailto:${CONFIG.correoDestino}?subject=${asunto}&body=${cuerpo}"><b>Envíalo por correo aquí</b></a>
+                  o escríbenos por WhatsApp con el botón de arriba.`
+  })[state.envio] || '';
+}
+
+/* ==============================================================
+   RESULTADO
+   ============================================================== */
+function resultado(){
+  const r = state.res;
+  const top = CARRERAS[r.top], seg = CARRERAS[r.seg];
+  const nombre = state.lead.nombre.split(' ')[0];
+  const msg = encodeURIComponent(
+    `Hola, soy ${state.lead.nombre}. Hice el test vocacional en el sitio de UNEV y mi resultado fue ` +
+    `${top.corto} (${r.t1} de 30). Quiero información sobre esta carrera.`);
+
+  card.innerHTML = `
+  <div class="screen">
+    <div class="verdict">
+      <span class="eyebrow">Resultado de ${esc(nombre)}</span>
+      <h2>${esc(top.corto)}${top.nueva ? '<span class="tag">Nueva carrera</span>' : ''}</h2>
+      <p>${esc(top.perfil)}</p>
+    </div>
+
+    <div class="chart">
+      <span class="eyebrow">Conteo por carrera · sobre 30 respuestas</span>
+      ${r.orden.map((k,i) => `
+        <div class="chart__row ${i===0?'chart__row--top':''}">
+          <span class="chart__k">${k}</span>
+          <span class="chart__label">${esc(CARRERAS[k].corto)}</span>
+          <span class="chart__pct">${r.conteo[k]}</span>
+        </div>
+        <div class="chart__track"><div class="chart__bar" data-w="${Math.round(r.conteo[k]/30*100)}"></div></div>
+      `).join('')}
+    </div>
+
+    <div class="detail">
+      <h2>Con esta carrera podrías</h2>
+      <ul>${top.hace.map(h=>`<li>${esc(h)}</li>`).join('')}</ul>
+      <p class="fine" style="margin-top:16px">Carrera técnica universitaria de 2 años ·
+      100% virtual · Título con validez oficial en Honduras.</p>
+    </div>
+
+    <div class="detail" style="margin-top:26px">
+      <h2>Tu segunda opción: ${esc(seg.corto)} · ${r.t2} de 30</h2>
+      <p class="fine">${esc(seg.perfil)}</p>
+    </div>
+
+    <div class="panel"><p style="margin:0;font-size:15px"><strong>Lectura del perfil.</strong> ${esc(r.lectura)}</p></div>
+
+    <a class="btn btn--primary btn--wide" href="https://wa.link/dcuzd1" target="_blank" rel="noopener">
+  Hablar con un asesor por WhatsApp</a>
+    <div class="actions">
+      <a class="btn btn--navy" href="https://unev.edu.hn/admisiones/" target="_blank" rel="noopener">Ver proceso de admisión</a>
+      <span class="spacer"></span>
+      <button class="btn btn--ghost" id="reset">Repetir el test</button>
+    </div>
+
+    <p class="status" id="estadoEnvio"></p>
+
+    <p class="fine" style="margin-top:18px">Este test es una herramienta de orientación, no un
+    diagnóstico psicométrico certificado. Su resultado es un punto de partida para conversar
+    con un asesor académico de UNEV.</p>
+  </div>`;
+
+  pintarEstado();
+  requestAnimationFrame(() => setTimeout(() => {
+    card.querySelectorAll('.chart__bar').forEach(b => b.style.width = b.dataset.w + '%');
+  }, 90));
+
+  document.getElementById('reset').onclick = () => {
+    state.resp = {}; state.lead = null; state.res = null; state.envio = "pendiente"; irA(0);
+  };
+}
+
+render();
+</script>
+</body>
+</html>
